@@ -26,11 +26,29 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="comments">Comments:</label>
-    <textarea name="comments" class="form-control" rows="10" id="paperComments"></textarea>
-    <small id="emailHelp" class="form-text text-muted">@TODO show markdown preview.</small>
+    <div class="row">
+      <div class="col-7">
+        <label for="comments">Comments:</label>
+        <textarea name="comments" class="form-control" rows="10" id="paperComments"></textarea>
+      </div>
+      <div class="col-5">
+        <label>Preview:</label>
+        <div class="card card-body bg-light" id="comments-preview"></div>
+      </div>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary mt-4">Submit</button>
+
+  <small class="text-muted"><b>@TODO</b> Add tags.</small>
 </form>
+
+<script>
+  // Populate markdown field on textarea typing.
+  $('#paperComments').on('change keyup paste', (el) => {
+    let markdown = $('#paperComments').val();
+    console.log('md:', markdown);
+    let markdownHtml = converter.makeHtml(markdown);
+    $('#comments-preview').html(markdownHtml);
+  });
+</script>
 
 {% endblock %}
