@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- Bootstrap 4.0 -->
+    <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <!-- jquery 3.4.1 -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+      crossorigin="anonymous"></script>
+    <!-- showdown (for rendering markdown) -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.js">
+    </script>
+    <!-- Title stuff -->
+    <title>Paper Pusher</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-primary mb-2">
+      <a class="navbar-brand" href="/" style="font-family: monospace; font-weight: bold">paperpusher</a>
+    </nav>
+    <div class="col-sm-8 offset-sm-2">
+      <div id="content">{% block content %}{% endblock %}</div>
+    </div>
+  </body>
+  <!-- My CSS. -->
+  <style>
+    .paper-card > .markdown {
+      background-color: #e0e0e0;
+    }
+  </style>
+  <!-- My Javascript. -->
+  <script>
+    /*
+     * Change all .markdown elements from raw text to proper HTML.
+     */
+    // TODO: move to its own file. Also import the favicon correctly.
+    var converter = new showdown.Converter();
+
+    $('.markdown').each((i, el) => {
+      console.log('el:', el);
+      let originalText = $(el).text();
+      let markdownHtml = converter.makeHtml(originalText);
+      $(el).html(markdownHtml);
+    });
+  </script>
+</html>

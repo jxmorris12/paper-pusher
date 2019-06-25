@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<br>
+<a class="btn btn-primary" href="/add" role="button" style="background: purple; border: none">add a paper</a>
+<br>
+
+{% for paper in papers %}
+  {% with paper=paper %}
+    {% include 'paper.html' %}
+  {% endwith %}
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h6 class="mt-4 mb-4" style="color: maroon"><i><b>TODO:</b> Automatically pull paper data from arxiv. 🙃</i></h6>
+
+<form action="/add_paper" method="POST">
+  <div class="form-group">
+    <label for="name">Paper Name</label>
+    <input name="name" class="form-control" id="paperName" placeholder="ex: Parsimonious Black-Box Adversarial Attacks via Efficient Combinatorial Optimization">
+  </div>
+  <div class="form-group">
+    <label for="source">Source</label>
+    <input name="source" class="form-control" id="paperSource" placeholder="ex: deep2Read/Basic16- Basic DNN Reads we finished for NLP/Text">
+    <small id="emailHelp" class="form-text text-muted">@TODO this should autosuggest from sources.</small>
+  </div>
+  <div class="form-group row">
+    <label for="example-date-input" class="col-2 col-form-label">Date Published</label>
+    <div class="col-10">
+      <input class="form-control" name="datePublished" type="date" value="2011-08-19" id="example-date-input">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="example-date-input" class="col-2 col-form-label">Date Read</label>
+    <div class="col-10">
+      <input class="form-control" name="dateRead" type="date" value="2019-06-25" id="example-date-input">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="comments">Comments:</label>
+    <textarea name="comments" class="form-control" rows="10" id="paperComments"></textarea>
+    <small id="emailHelp" class="form-text text-muted">@TODO show markdown preview.</small>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}
