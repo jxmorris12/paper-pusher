@@ -1,24 +1,38 @@
 {% extends "layout.html" %}
 {% block content %}
 
+PAPER: {{ paper.to_json() }}
+
 <h6 class="mt-4 mb-4" style="color: maroon"><i><b>TODO:</b> Automatically pull paper data from arxiv. 🙃</i></h6>
 
-<form action="/add_paper" method="POST">
+<form action="/edit_paper" method="POST">
+  <!-- paper ID, if this is editing. -->
+  <input type="hidden" id="id" name="id" value="{{paper.id}}">
   <div class="form-group">
     <label for="title">Paper Title</label>
-    <input name="title" class="form-control" id="paperName" placeholder="ex: Parsimonious Black-Box Adversarial Attacks via Efficient Combinatorial Optimization">
+    <input name="title" class="form-control" id="paperName"
+      value="{{ paper.title }}"
+      placeholder="ex: Parsimonious Black-Box Adversarial Attacks via Efficient Combinatorial Optimization">
   </div>
     <div class="form-group">
       <label for="author">Paper Author</label>
-      <input name="author" class="form-control" id="authorName" placeholder="ex: Ian Goodfellow">
+      <input name="author" class="form-control" id="authorName"
+        value="{{paper.author}}"
+        placeholder="ex: Ian Goodfellow">
     </div>
   <div class="form-group">
     <label for="source">Source</label>
-    <input name="source" class="form-control" id="paperSource" placeholder="ex: deep2Read/Basic16- Basic DNN Reads we finished for NLP/Text">
+    <input name="source" class="form-control" id="paperSource"
+      value="{{paper.source}}"
+      placeholder="ex: deep2Read/Basic16- Basic DNN Reads we finished for NLP/Text">
     <small id="emailHelp" class="form-text text-muted">@TODO this should autosuggest from sources.</small>
   </div>
   <div class="form-check m-4">
-    <input name="inQueue" class="form-check-input" type="checkbox" value="" id="inQueue">
+    {% if paper.inQueue == 0 %}
+      <input name="inQueue" class="form-check-input" type="checkbox" id="inQueue">
+    {% else %}
+      <input name="inQueue" class="form-check-input" type="checkbox" checked id="inQueue">
+    {% endif %}
     <label class="form-check-label" for="inQueue">
       <b>Paper is still in my queue (I haven't finished reading it yet)</b>
     </label>
@@ -26,13 +40,15 @@
   <div class="form-group row">
     <label for="example-date-input" class="col-2 col-form-label">Date Published</label>
     <div class="col-10">
-      <input class="form-control" name="datePublished" type="date" value="2011-08-19" id="example-date-input">
+      <input class="form-control" name="datePublished" type="date"
+        value="{{paper.datePublished}}" id="example-date-input">
     </div>
   </div>
   <div class="form-group row">
     <label for="example-date-input" class="col-2 col-form-label">Date Read</label>
     <div class="col-10">
-      <input class="form-control" name="dateRead" type="date" value="2019-06-25" id="example-date-input">
+      <input class="form-control" name="dateRead" type="date"
+        value="{{paper.dateRead}}" id="example-date-input">
     </div>
   </div>
   <hr>
@@ -40,7 +56,9 @@
     <h5>Summary:</h5>
     <div class="row">
       <div class="col-7">
-        <textarea name="summary" class="form-control" rows="10" id="paperSummary"></textarea>
+        <textarea name="summary" class="form-control" rows="10"
+          value="{{paper.summary}}"
+          id="paperSummary"></textarea>
       </div>
       <div class="col-5">
         <div class="card card-body bg-light" id="comments-preview"></div>
@@ -51,7 +69,9 @@
     <h5>Future Work:</h5>
     <div class="row">
       <div class="col-7">
-        <textarea name="futureWork" class="form-control" rows="10" id="futureWork"></textarea>
+        <textarea name="futureWork" class="form-control" rows="10"
+          value="{{paper.futureWork}}"
+          id="futureWork"></textarea>
       </div>
       <div class="col-5">
         <div class="card card-body bg-light" id="future-work-preview"></div>
@@ -62,7 +82,9 @@
     <h5>Other Thoughts:</h5>
     <div class="row">
       <div class="col-7">
-        <textarea name="otherThoughts" class="form-control" rows="10" id="otherThoughts"></textarea>
+        <textarea name="otherThoughts" class="form-control" rows="10"
+          value={{paper.otherThoughts}}
+          id="otherThoughts"></textarea>
       </div>
       <div class="col-5">
         <div class="card card-body bg-light" id="other-thoughts-preview"></div>

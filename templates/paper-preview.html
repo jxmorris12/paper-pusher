@@ -1,11 +1,18 @@
+{{ paper.to_json() }}
 <div class="card m-4 card-body bg-light paper-card">
   <h5>
       <span class="badge badge-secondary">{{ paper.id }}</span>
       <a href="/paper/{{paper.id}}">{{ paper.title }}</a>
   </h5>
-  <p><b>Read: {{ paper.dateRead }}</b></p>
-  <h6> Summary: </h6>
-  <div class="markdown p-2">
-    {{ paper.summary|truncate }}
-  </div>
+
+  {% if paper.dateRead %}
+    <p><b>Read: {{ paper.dateRead }}</b></p>
+  {% endif %}
+
+  {% if paper.summary %}
+    <h6> Summary: </h6>
+    <div class="markdown p-2">
+      {{ paper.summary|truncate }}
+    </div>
+  {% endif %}
 </div>

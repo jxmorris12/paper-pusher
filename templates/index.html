@@ -1,25 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<br>
-<a class="btn btn-primary" href="/add" role="button" style="background: purple; border: none">add a paper</a>
-<br>
-<div class="row">
-  <div class="col-8" id="recent-reads">
-    <h2>Recent Reads</h2>
-    {% if papers %}
-      {% for paper in papers %}
-        {% with paper=paper %}
-          {% include 'paper-preview.html' %}
-        {% endwith %}
-      {% endfor %}
-    {% else %}
-      No papers. Get reading and log one here!
-    {% endif %}
-  </div>
-  <div class="col-4" id="queue">
-    <h2>Queue</h2>
-    queue goes here
+<div style="width: 100%; height: 100%;">
+
+  <div class="align-middle text-center">
+    <br> <br>
+    <br> <br>
+    <h1>
+      <a href="/papers">Papers</a>
+      <br> <br>
+      <a href="#"> Books </a>
+    </h1>
   </div>
 </div>
 

@@ -1,23 +1,36 @@
 {% extends "layout.html" %}
 {% block content %}
 
+paper: {{ paper.to_json() }}
+  <a class="btn btn-primary float-right" href="/edit/{{paper.id}}" role="button"
+      style="background: orange; border: none">Edit</a>
 <div class="card m-4 card-body bg-light paper-card">
   <h5>{{ paper.title }} </h5>
   <p> Source: {{ paper.source }}</p>
   <p> Date Published: {{ paper.datePublished }} </p>
-  <p> Date Read: {{ paper.dateRead }} </p>
+  {% if paper.dateRead %}
+    <p> Date Read: {{ paper.dateRead }} </p>
+  {% else %}
+    <p><i>Paper has not been read yet.</i></p>
+  {% endif %}
   <h6> Summary: </h6>
-  <div class="markdown p-2">
-    {{ paper.summary }}
-  </div>
-  <h6> Future Work: </h6>
-  <div class="markdown p-2">
-    {{ paper.futureWork }}
-  </div>
-  <h6> Other Thoughts: </h6>
-  <div class="markdown p-2">
-    {{ paper.otherThoughts }}
-  </div>
+  {% if paper.summary %}
+    <div class="markdown p-2">
+      {{ paper.summary }}
+    </div>
+  {% endif %}
+  {% if paper.futureWork %}
+    <h6> Future Work: </h6>
+    <div class="markdown p-2">
+      {{ paper.futureWork }}
+    </div>
+  {% endif %}
+  {% if paper.otherThoughts %}
+    <h6> Other Thoughts: </h6>
+    <div class="markdown p-2">
+      {{ paper.otherThoughts }}
+    </div>
+  {% endif %}
 
 </div>
 

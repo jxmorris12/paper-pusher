@@ -20,13 +20,15 @@ def create_paper_table():
     db = get_db()
     create_table_sql = '''CREATE TABLE IF NOT EXISTS papers (
         id integer PRIMARY KEY,
+        inQueue integer,
         title text NOT NULL,
-        source text NOT NULL,
+        author text NOT NULL,
+        source text,
         datePublished text NOT NULL,
-        dateRead text NOT NULL,
-        summary text NOT NULL,
-        futureWork text NOT NULL,
-        otherThoughts text NOT NULL
+        dateRead text,
+        summary text,
+        futureWork text,
+        otherThoughts text
     );'''
     try:
         c = db.cursor()
@@ -34,6 +36,30 @@ def create_paper_table():
         db.commit()
     except Error as e:
         print('Error inserting new table:', e)
+
+def query_db_papers(query_where='', retry=False):
+    try:
+        # Get papers from database 'papers' table.
+        db = get_db()
+        db.row_factory = sqlite3.Row # This enables column access by name: row['column_name']
+        query = 'SELECT * from {} {}'.format(PAPER_DB_TYPE, query_where)
+        conn = db.cursor()
+        rows = conn.execute(query).fetchall()
+        conn.close()
+        print('executed query:', query)
+        print('\t got rows:', rows)
+        # If no papers, return [] instead of '[]'. :)
+        if rows == '[]':
+            return []
+        else:
+            return [Paper.from_sql_row(row) for row in rows]
+    except sqlite3.OperationalError as e:
+        if not retry:
+            # First error-- try inserting table.
+            create_paper_table()
+            return Paper.get_all(query_where=query_where, retry=True)
+        else:
+            raise e
 
 # The string that identifies this type within the database.
 PAPER_DB_TYPE = 'papers'
@@ -43,30 +69,62 @@ class Paper:
 
     Also interfaces directly with database. """
 
-    columns = ['title', 'source', 'datePublished', 'dateRead', 'summary', 'futureWork', 'otherThoughts']
+    # The order of these column names MUST match the order in SQL.
+    columns = ['inQueue', 'title', 'author', 'source', 'datePublished',
+                'dateRead', 'summary', 'futureWork', 'otherThoughts']
+
+    optional_columns = ['source', 'dateRead', 'summary', 'futureWork',
+        'otherThoughts']
 
     def __init__(self, **kwargs):
         """ A constructor that automatically stores all keyword arguments.
 
         (Because I'm lazy.) """
 
-        print('kwargs:', kwargs)
         # Validate entry.
         for param in Paper.columns:
-            if param not in kwargs:
+            if param not in kwargs and param not in Paper.optional_columns:
                 raise ValueError('Cannot instantiate paper without {}.'.format(param))
         # Store.
         self.__dict__.update(kwargs)
 
+    def update(self):
+        """ Update an object by its ID. """
+
+        if not self.id:
+            raise Exception('Cannot update an object without an ID.')
+
+        db = get_db()
+
+        sql_cmd = 'UPDATE {} SET'.format(PAPER_DB_TYPE)
+        sql_vars = []
+        set_vars = []
+        for col in Paper.columns:
+            if col in self.__dict__:
+                set_vars.append(' {} = ?'.format(col))
+                sql_vars.append(self.__dict__[col])
+        sql_cmd += ', '.join(set_vars)
+        sql_cmd += ' WHERE id = {}'.format(self.id)
+        print('sql:', sql_cmd)
+        print('\tsql_vars:',sql_vars)
+        cur = db.cursor()
+        cur.execute(sql_cmd, sql_vars)
+        db.commit()
+        print('updated obj with id:', self.id)
+
     def save(self):
         """ Save an object to the database and get its ID. """
         db = get_db()
-        col_sql = '({})'.format(','.join(Paper.columns)) # '(title,source,...,otherThoughts)'
-        col_sql_vals = tuple(self.__dict__[x] for x in Paper.columns)
-        col_sql_q = '({})'.format(','.join(['?' for _ in Paper.columns]))
+        columns = Paper.columns
+        col_sql = '({})'.format(','.join(columns)) # '(title,source,...,otherThoughts)'
+        col_sql_vals = []
+        for col in columns:
+            if col in self.__dict__:
+                col_sql_vals.append(self.__dict__[col])
+            else:
+                col_sql_vals.append(None)
+        col_sql_q = '({})'.format(','.join(['?' for _ in columns]))
         sql = ''' INSERT INTO {}{} VALUES{} '''.format(PAPER_DB_TYPE, col_sql, col_sql_q)
-        print('sql:', sql)
-        print('col_sql_vals:', col_sql_vals)
         cur = db.cursor()
         cur.execute(sql, col_sql_vals)
         db.commit()
@@ -85,60 +143,28 @@ class Paper:
 
     @staticmethod
     def get_paper_by_id(paper_id):
-        # Get papers from database 'papers' table by ID.
-        db = get_db()
-        db.row_factory = sqlite3.Row # This enables column access by name: row['column_name']
-        conn = db.cursor()
-        rows = conn.execute('SELECT * from {} WHERE id={}'.format(
-            PAPER_DB_TYPE, paper_id)
-        ).fetchall()
-        conn.close()
+        papers = query_db_papers('WHERE id={}'.format(paper_id))
         #@TODO: Throw error for multiple rows, and for 0 rows?
-        return Paper.from_sql_row(rows[0])
+        return papers[0]
+
+    @staticmethod
+    def get_papers_read(retry=False):
+        return query_db_papers('WHERE inQueue = 0')
+
+    @staticmethod
+    def get_papers_in_queue(retry=False):
+        return query_db_papers('WHERE inQueue = 1')
 
     @staticmethod
     def get_all(retry=False):
-        try:
-            # Get papers from database 'papers' table.
-            db = get_db()
-            db.row_factory = sqlite3.Row # This enables column access by name: row['column_name']
-
-            conn = db.cursor()
-            rows = conn.execute('SELECT * from {}'.format(PAPER_DB_TYPE)).fetchall()
-            conn.close()
-            # If no papers, return None instead of '[]'. :)
-            if rows == '[]':
-                return None
-            else:
-                return [Paper.from_sql_row(row) for row in rows]
-        except sqlite3.OperationalError as e:
-            if not retry:
-                # First error-- try inserting table.
-                create_paper_table()
-                return Paper.get_all(retry=True)
-            else:
-                raise e
-
-    @classmethod
-    def from_params(_class, params):
-        """ Creates a Paper from POST request params.
-
-        For now, do not convert times to datetime objects; keep them as ISO
-            strings. """
-        print('params:', params)
-        return _class(
-            title=params.get('title'),
-            source=params.get('source'),
-            datePublished=params.get('datePublished'),
-            dateRead=params.get('dateRead'),
-            summary=params.get('summary'),
-            futureWork=params.get('futureWork'),
-            otherThoughts=params.get('otherThoughts'),
-        )
+        return query_db_papers()
 
     @classmethod
     def from_arxiv(_class, object):
-        """ Creates a Paper from an arxiv search result. """
+        """ Creates a Paper from an arxiv search result.
+
+            @TODO update this function for Sqlite3.
+         """
         title = object.title
         source = None
         datePublished = date_to_iso(object.published)

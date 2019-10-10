@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="row mt-4">
+  <div class="col-12 text-center">
+    <!-- todo make this button nicer -->
+    <a class="btn btn-primary" href="/add" role="button" style="background: purple; border: none">Add a paper</a>  
+    <hr style="height: 2px">
+  </div>
+  <div class="col-8" id="recent-reads">
+    <h2>Recent Reads</h2>
+    {% if papers_read %}
+      {% for paper in papers_read %}
+        {% with paper=paper %}
+          {% include 'paper-preview.html' %}
+        {% endwith %}
+      {% endfor %}
+    {% else %}
+      No papers. Get reading and log one here!
+    {% endif %}
+  </div>
+  <div class="col-4" id="queue">
+    <h2>Queue</h2>
+      {% if papers_in_queue %}
+        {% for paper in papers_in_queue %}
+          {% with paper=paper %}
+            {% include 'paper-preview.html' %}
+          {% endwith %}
+        {% endfor %}
+      {% else %}
+        Add some papers to the queue! 🤗
+      {% endif %}
+  </div>
+</div>
+
+{% endblock %}
