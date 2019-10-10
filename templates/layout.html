@@ -14,14 +14,25 @@
     <!-- showdown (for rendering markdown) -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.js">
     </script>
+    <!-- my css file -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style/main.css') }}" />
     <!-- Title stuff -->
     <title>Paper Pusher</title>
   </head>
   <body>
-    <nav class="navbar navbar-dark bg-primary mb-2">
-      <a class="navbar-brand" href="/" style="font-family: monospace; font-weight: bold">paperpusher</a>
+    <nav class="navbar navbar-dark bg-primary mb-2 navbar navbar-expand-lg">
+      <a class="navbar-brand ml-4" href="/"
+          style="font-family: monospace; font-weight: bold">
+            paper pusher
+      </a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto mr-4">
+            <li><a href="#" class="nav-link">Books</a></li>
+            <li><a href="#" class="nav-link">Papers</a></li>
+        </ul>
+      </div>
     </nav>
-    <div class="col-sm-8 offset-sm-2">
+    <div class="col-sm-10 col-xs-12 offset-sm-1">
       <div id="content">{% block content %}{% endblock %}</div>
     </div>
   </body>

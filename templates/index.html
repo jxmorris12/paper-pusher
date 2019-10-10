@@ -4,11 +4,18 @@
 <br>
 <a class="btn btn-primary" href="/add" role="button" style="background: purple; border: none">add a paper</a>
 <br>
-
-{% for paper in papers %}
-  {% with paper=paper %}
-    {% include 'paper.html' %}
-  {% endwith %}
-{% endfor %}
+<div class="row">
+  <div class="col-8" id="recent-reads">
+    <h2>Recent Reads</h2>
+    {% for paper in papers %}
+      {% with paper=paper %}
+        {% include 'paper-preview.html' %}
+      {% endwith %}
+    {% endfor %}
+  </div>
+  <div class="col-4" id="queue">
+    <h2>Queue</h2>
+  </div>
+</div>
 
 {% endblock %}

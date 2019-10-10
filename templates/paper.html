@@ -1,5 +1,8 @@
+{% extends "layout.html" %}
+{% block content %}
+
 <div class="card m-4 card-body bg-light paper-card">
-  <h5>{{ paper.name }} </h5>
+  <h5>{{ paper.title }} </h5>
   <p> Source: {{ paper.source }}</p>
   <p> Date Published: {{ paper.datePublished }} </p>
   <p> Date Read: {{ paper.dateRead }} </p>
@@ -8,3 +11,5 @@
     {{ paper.comments }}
   </div>
 </div>
+
+{% endblock %}

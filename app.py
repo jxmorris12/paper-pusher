@@ -18,11 +18,9 @@ def add():
 @app.route('/add_paper', methods=['POST'])
 def add_paper():
     params = request.form
-    print('params:',params)
     paper = Paper.from_params(params)
     paper.save()
-    return redirect('/')
-
+    return redirect('/') # @TODO highlight paper in list after redirect.
 
 if __name__ == '__main__':
     app.run(debug=True)

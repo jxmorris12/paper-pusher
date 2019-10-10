@@ -1,0 +1,8 @@
+<div class="card m-4 card-body bg-light paper-card">
+  <h5>{{ paper.title }} </h5>
+  <p><b>Read: {{ paper.dateRead }}</b></p>
+  <h6> Comments: </h6>
+  <div class="markdown p-2">
+    {{ paper.comments|truncate }}
+  </div>
+</div>

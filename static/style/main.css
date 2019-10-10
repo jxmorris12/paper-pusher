@@ -1,0 +1,10 @@
+/* Box titled 'Recent Reads' */
+#recent-reads {
+  padding: 16px;
+}
+
+/* Box titled 'Queue'. */
+#queue {
+  padding: 16px;
+  border-left: 1px solid #e0e0e0;
+}
