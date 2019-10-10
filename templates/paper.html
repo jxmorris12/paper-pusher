@@ -6,10 +6,19 @@
   <p> Source: {{ paper.source }}</p>
   <p> Date Published: {{ paper.datePublished }} </p>
   <p> Date Read: {{ paper.dateRead }} </p>
-  <h6> Comments: </h6>
+  <h6> Summary: </h6>
   <div class="markdown p-2">
-    {{ paper.comments }}
+    {{ paper.summary }}
   </div>
+  <h6> Future Work: </h6>
+  <div class="markdown p-2">
+    {{ paper.futureWork }}
+  </div>
+  <h6> Other Thoughts: </h6>
+  <div class="markdown p-2">
+    {{ paper.otherThoughts }}
+  </div>
+
 </div>
 
 {% endblock %}

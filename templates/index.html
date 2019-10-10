@@ -7,14 +7,19 @@
 <div class="row">
   <div class="col-8" id="recent-reads">
     <h2>Recent Reads</h2>
-    {% for paper in papers %}
-      {% with paper=paper %}
-        {% include 'paper-preview.html' %}
-      {% endwith %}
-    {% endfor %}
+    {% if papers %}
+      {% for paper in papers %}
+        {% with paper=paper %}
+          {% include 'paper-preview.html' %}
+        {% endwith %}
+      {% endfor %}
+    {% else %}
+      No papers. Get reading and log one here!
+    {% endif %}
   </div>
   <div class="col-4" id="queue">
     <h2>Queue</h2>
+    queue goes here
   </div>
 </div>
 

@@ -25,15 +25,37 @@
       <input class="form-control" name="dateRead" type="date" value="2019-06-25" id="example-date-input">
     </div>
   </div>
+  <hr>
   <div class="form-group">
+    <h5>Summary:</h5>
     <div class="row">
       <div class="col-7">
-        <label for="comments">Comments:</label>
-        <textarea name="comments" class="form-control" rows="10" id="paperComments"></textarea>
+        <textarea name="summary" class="form-control" rows="10" id="paperSummary"></textarea>
       </div>
       <div class="col-5">
-        <label>Preview:</label>
         <div class="card card-body bg-light" id="comments-preview"></div>
+      </div>
+  </div>
+  <hr>
+  <div class="form-group">
+    <h5>Future Work:</h5>
+    <div class="row">
+      <div class="col-7">
+        <textarea name="futureWork" class="form-control" rows="10" id="paperFutureWork"></textarea>
+      </div>
+      <div class="col-5">
+        <div class="card card-body bg-light" id="future-work-preview"></div>
+      </div>
+  </div>
+  <hr>
+  <div class="form-group">
+    <h5>Other Thoughts:</h5>
+    <div class="row">
+      <div class="col-7">
+        <textarea name="otherThoughts" class="form-control" rows="10" id="paperOtherThoughts"></textarea>
+      </div>
+      <div class="col-5">
+        <div class="card card-body bg-light" id="other-thoughts-preview"></div>
       </div>
   </div>
   <button type="submit" class="btn btn-primary mt-4">Submit</button>
