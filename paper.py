@@ -4,7 +4,6 @@ import json
 import sqlite3
 
 from flask import g # global flask variables
-from tinydb import TinyDB, where, Query
 
 DATABASE = './database.db'
 
@@ -120,7 +119,10 @@ class Paper:
         col_sql_vals = []
         for col in columns:
             if col in self.__dict__:
-                col_sql_vals.append(self.__dict__[col])
+                val = self.__dict__[col]
+                if isinstance(val, str):
+                    val = val.strip() # Trim whitespace
+                col_sql_vals.append(val)
             else:
                 col_sql_vals.append(None)
         col_sql_q = '({})'.format(','.join(['?' for _ in columns]))
@@ -138,6 +140,10 @@ class Paper:
 
     @staticmethod
     def from_sql_row(row):
+        row = list(row)
+        for i in range(len(row)):
+            if isinstance(row[i], str):
+                row[i] = row[i].strip()
         obj_dict = dict(zip(['id'] + Paper.columns, row))
         return Paper(**obj_dict)
 

@@ -1,3 +1,19 @@
+/* General styles. */
+
+.btn:hover {
+  transform: scale(1.1);
+  -webkit-transition: transform 200ms; /* Safari prior 6.1 */
+  transition: transform 200ms;
+}
+
+/* On paper detail page. */
+.paper-card > .markdown {
+  /* background-color: #e0e0e0; */
+  border: 1px solid gray;
+  border-radius: 4px;
+  background: white;
+}
+
 /* Box titled 'Recent Reads' */
 #recent-reads {
   padding: 16px;
@@ -5,6 +21,7 @@
 
 /* Box titled 'Queue'. */
 #queue {
+  /* margin: 8px; */
   padding: 16px;
   border-left: 1px solid #e0e0e0;
 }

@@ -57,8 +57,7 @@ PAPER: {{ paper.to_json() }}
     <div class="row">
       <div class="col-7">
         <textarea name="summary" class="form-control" rows="10"
-          value="{{paper.summary}}"
-          id="paperSummary"></textarea>
+          id="paperSummary">{{paper.summary}}</textarea>
       </div>
       <div class="col-5">
         <div class="card card-body bg-light" id="comments-preview"></div>
@@ -70,8 +69,7 @@ PAPER: {{ paper.to_json() }}
     <div class="row">
       <div class="col-7">
         <textarea name="futureWork" class="form-control" rows="10"
-          value="{{paper.futureWork}}"
-          id="futureWork"></textarea>
+          id="futureWork">{{paper.futureWork}}</textarea>
       </div>
       <div class="col-5">
         <div class="card card-body bg-light" id="future-work-preview"></div>
@@ -83,8 +81,7 @@ PAPER: {{ paper.to_json() }}
     <div class="row">
       <div class="col-7">
         <textarea name="otherThoughts" class="form-control" rows="10"
-          value={{paper.otherThoughts}}
-          id="otherThoughts"></textarea>
+          id="otherThoughts">{{paper.otherThoughts}}</textarea>
       </div>
       <div class="col-5">
         <div class="card card-body bg-light" id="other-thoughts-preview"></div>
