@@ -1,7 +1,9 @@
 <div class="card m-4 card-body bg-light paper-card">
   <h5>
-      <span class="badge badge-secondary">{{ paper.id }}</span>
-      <a href="/paper/{{paper.id}}">{{ paper.title }}</a>
+      <!-- <span class="badge badge-secondary">{{ paper.id }}</span> -->
+      <a href="/paper/{{paper.id}}"
+        {% if paper.inQueue %}style="color: #666"{% endif %}
+        >{{ paper.title }}</a>
   </h5>
 
   {% if paper.dateRead %}

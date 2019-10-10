@@ -1,17 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="row mt-4">
-  <div class="col-12 text-center">
-    <!-- todo make this button nicer -->
-    <a class="btn btn-primary" href="/add" role="button" style="background: purple; border: none">
-      <i class="fas fa-plus-circle"></i>
-      Add a paper
-    </a>
-    <hr style="height: 2px">
-  </div>
+<div class="row">
   <div class="col-8" id="recent-reads">
-    <h2>Recent Reads</h2>
+    <div class="mb-3">
+      <h2 class="float-left ml-4">Recent Reads</h2>
+      <a class="btn btn-primary float-right" href="/add" role="button" style="background: purple; border: none">
+        <!-- todo make this button nicer -->
+          <i class="fas fa-plus-circle"></i>
+          Add a paper
+        </a>
+    </div>
+    <br>
     {% if papers_read %}
       {% for paper in papers_read %}
         {% with paper=paper %}
@@ -23,7 +23,7 @@
     {% endif %}
   </div>
   <div class="col-4" id="queue">
-    <h2>Queue</h2>
+    <h2 class="ml-4 mb-4">Queue</h2>
       {% if papers_in_queue %}
         {% for paper in papers_in_queue %}
           {% with paper=paper %}

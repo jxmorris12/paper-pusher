@@ -9,7 +9,11 @@ DATABASE = './database.db'
 
 # Helper function for getting the database.
 def get_db():
-    db = getattr(g, '_database', None)
+    try:
+        db = getattr(g, '_database', None)
+    except RuntimeError:
+        # Flask isn't running.
+        return sqlite3.connect(DATABASE)
     if db is None:
         db = g._database = sqlite3.connect(DATABASE)
     return db
@@ -72,6 +76,8 @@ class Paper:
     columns = ['inQueue', 'title', 'author', 'source', 'datePublished',
                 'dateRead', 'summary', 'futureWork', 'otherThoughts']
 
+    date_columns = ['datePublished', 'dateRead']
+
     optional_columns = ['source', 'dateRead', 'summary', 'futureWork',
         'otherThoughts']
 
@@ -84,6 +90,7 @@ class Paper:
         for param in Paper.columns:
             if param not in kwargs and param not in Paper.optional_columns:
                 raise ValueError('Cannot instantiate paper without {}.'.format(param))
+
         # Store.
         self.__dict__.update(kwargs)
 
@@ -164,6 +171,48 @@ class Paper:
     @staticmethod
     def get_all(retry=False):
         return query_db_papers()
+
+    @staticmethod
+    def from_excel(row):
+    # columns = ['inQueue', 'title', 'author', 'source', 'datePublished',
+                # 'dateRead', 'summary', 'futureWork', 'otherThoughts']
+        """ Creates a paper from the custom object I have in my excel sheet.
+
+            inQueue
+        """
+
+        row = row.rename({
+            'Name': 'title',
+            'Authors': 'author',
+            'Source': 'source',
+            'Written': 'datePublished',
+            'Read?': 'dateRead',
+            'Notes': 'summary',
+            'Future Work (what could we improve?)': 'futureWork',
+            'Other Thoughts': 'otherThoughts'
+        })
+
+        row = dict(row)
+
+        # Change dates to strings.
+        row['datePublished'] = str(row['datePublished'].date())
+        if row['dateRead']:
+            row['dateRead'] = str(row['dateRead'].date())
+
+        # Change NaN/NaT to None.
+        for key in row:
+            if row[key] == 'NaN' or row[key] == 'NaT':
+                row[key] = None
+
+        # Set inQueue.
+        if row['dateRead']:
+            row['inQueue'] = 0
+        else:
+            row['inQueue'] = 1
+
+        print('got row:', row)
+
+        return Paper(**row)
 
     @classmethod
     def from_arxiv(_class, object):

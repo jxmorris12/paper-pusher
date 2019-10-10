@@ -12,6 +12,8 @@ def index():
 def papers():
     """ Display all papers. """
     papers_read = Paper.get_papers_read()
+    papers_read.sort(key=lambda p: p.dateRead) # sort by date, ascending
+    papers_read = papers_read[::-1] # sort by date, descending
     papers_in_queue = Paper.get_papers_in_queue()
     print(
         'papers read:', len(papers_read),
